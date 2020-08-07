@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostListener } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AssetService } from '../asset.service';
+import { AssetService, Asset } from '../asset.service';
 
 @Component({
   selector: 'app-asset-info',
@@ -10,12 +10,9 @@ import { AssetService } from '../asset.service';
 })
 export class AssetInfoComponent implements OnInit {
   
-  assetInfo : any;
   id : number;
-  @Input() info : any;
-  @Output() home = new EventEmitter();
-  assestData = [];
-  ass : any;
+  assestData :Asset[];
+  assetInfo : Asset;
 
   constructor(private location: Location, private router: ActivatedRoute, private assetService: AssetService, private routing: Router) { }
 
@@ -23,25 +20,12 @@ export class AssetInfoComponent implements OnInit {
     let id = parseInt(this.router.snapshot.paramMap.get('id'));
     this.id = id;
     this.assestData = this.assetService.getAssets();
-    this.ass = this.getData();
+    this.assetInfo = this.getData();
   }
 
   getData() {
     return this.assestData.find(element => element.id == this.id);
   }
-
-  getAssetById(asset:any) {
-    this.assetInfo = asset;
-  }
-
-  goHome() {
-    this.home.emit();
-  }
-
- 
-    homeb() {
-        this.location.back();
-    }
 
   updateAsset() {
     this.routing.navigate(['update'],{relativeTo:this.router});
